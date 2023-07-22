@@ -20,13 +20,9 @@ contract DegenToken {
 
     mapping(uint256 => Item) private _items;
     uint256 private _nextItemId = 1;
-
-
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
     event Redemption(address indexed user, uint256 itemId, uint256 tokenAmount, string itemName);
-
-
 
     constructor() {
         _name = "Degen";
@@ -83,17 +79,12 @@ contract DegenToken {
     require(tokenAmount > 0, "Invalid token amount");
     require(_balances[msg.sender] >= tokenAmount, "Insufficient balance");
 
-    // Deduct the cost of the item (token amount) from the user's account.
     _balances[msg.sender] -= tokenAmount;
 
-    // Decrease the total supply of the token by the redeemed amount.
     _totalSupply -= tokenAmount;
 
-    // Emit the Redemption event with the relevant information
     emit Redemption(msg.sender, itemId, tokenAmount, itemName);
 
-    // Implement the logic to provide the redeemed item or reward to the user here.
-    // You can use the `itemId`, `itemName`, and `tokenAmount` variables to handle the redemption.
     }
 
     function addItem(uint256 itemId, string memory itemName, uint256 price) external onlyOwner {
@@ -101,10 +92,8 @@ contract DegenToken {
     require(bytes(itemName).length > 0, "Invalid item name");
     require(price > 0, "Invalid price");
 
-    // Check if an item with the same itemId already exists
     require(_items[itemId].itemId == 0, "Item with this ID already exists");
 
-    // Create a new item with the provided itemId, itemName, and price
     _items[itemId] = Item(itemId, itemName, price);
     _nextItemId++;
     }
